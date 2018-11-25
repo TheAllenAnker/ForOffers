@@ -7,13 +7,15 @@ public class SlidingWindow {
     private int[] arr;
     private int L;
     private int R;
-    private Deque<Integer> deque;
+    private Deque<Integer> maxDeque;
+    private Deque<Integer> minDeque;
 
     public SlidingWindow(int[] arr) {
         this.arr = arr;
         L = -1;
         R = -1;
-        deque = new ArrayDeque<>();
+        maxDeque = new ArrayDeque<>();
+        minDeque = new ArrayDeque<>();
     }
 
     public void moveRight(int steps) {
@@ -26,10 +28,14 @@ public class SlidingWindow {
 
         for (int i = 0; i < steps; i++) {
             int curr = arr[++R];
-            while (!deque.isEmpty() && curr >= arr[deque.peekLast()]) {
-                deque.pollLast();
+            while (!maxDeque.isEmpty() && curr >= arr[maxDeque.peekLast()]) {
+                maxDeque.pollLast();
             }
-            deque.add(R);
+            maxDeque.add(R);
+            while (!minDeque.isEmpty() && curr <= arr[minDeque.peekLast()]) {
+                minDeque.pollLast();
+            }
+            minDeque.add(R);
         }
     }
 
@@ -42,24 +48,38 @@ public class SlidingWindow {
         }
 
         for (int i = 0; i < steps; i++) {
-            deque.pollFirst();
             L++;
+            if (L == maxDeque.peekFirst()) {
+                maxDeque.pollFirst();
+            }
+            if (L == minDeque.peekFirst()) {
+                minDeque.pollFirst();
+            }
         }
     }
 
     public int getMaxInWindow() {
-        if (deque.isEmpty()) {
+        if (maxDeque.isEmpty()) {
             throw new IllegalStateException("No Elements in Window");
         }
 
-        return arr[deque.peekFirst()];
+        return arr[maxDeque.peekFirst()];
+    }
+
+    public int getMinInWindow() {
+        if (minDeque.isEmpty()) {
+            throw new IllegalStateException("No Elements in Window");
+        }
+
+        return arr[minDeque.peekFirst()];
     }
 
     public static void main(String[] args) {
         int[] arr = new int[]{5, 4, 1, 3, 6};
         SlidingWindow slidingWindow = new SlidingWindow(arr);
-        slidingWindow.moveRight(5);
-//        slidingWindow.moveLeft(2);
+        slidingWindow.moveRight(3);
+        slidingWindow.moveLeft(1);
         System.out.println(slidingWindow.getMaxInWindow());
+        System.out.println(slidingWindow.getMinInWindow());
     }
 }
