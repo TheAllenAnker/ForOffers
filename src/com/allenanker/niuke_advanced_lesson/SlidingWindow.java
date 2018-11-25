@@ -18,6 +18,14 @@ public class SlidingWindow {
         minDeque = new ArrayDeque<>();
     }
 
+    public int getL() {
+        return L;
+    }
+
+    public int getR() {
+        return R;
+    }
+
     public void moveRight(int steps) {
         if (steps < 0) {
             throw new IllegalArgumentException("Steps must be bigger than zero");
