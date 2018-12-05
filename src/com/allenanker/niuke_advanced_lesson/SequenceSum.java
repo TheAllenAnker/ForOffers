@@ -20,7 +20,7 @@ public class SequenceSum {
         int[] minSumEnds = new int[len];
         minSums[len - 1] = nums[len - 1];
         minSumEnds[len - 1] = len - 1;
-        for (int i = len - 2; i >= 0 ; i--) {
+        for (int i = len - 2; i >= 0; i--) {
             if (minSums[i + 1] < 0) {
                 minSums[i] = nums[i] + minSums[i + 1];
                 minSumEnds[i] = minSumEnds[i + 1];
@@ -30,23 +30,24 @@ public class SequenceSum {
             }
         }
 
-        int max = 0;
-        int currMinSum;
-        int currMinEnd;
-        for (int i = 0; i < len; i++) {
-            currMinSum = minSums[i];
-            currMinEnd = minSumEnds[i];
-            while (currMinSum <= target) {
-                max = Math.max(max, currMinEnd - i + 1);
-                if (currMinEnd + 1 >= len) {
-                    break;
-                }
-                currMinSum += minSums[currMinEnd + 1];
-                currMinEnd = minSumEnds[currMinEnd + 1];
+        int maxLen = 0;
+        int currMinSum = 0;
+        int currMinEnd = 0;
+        for (int start = 0; start < len; start++) {
+            // extend to the right most position until the sum is bigger than the target
+            while (currMinEnd < len && currMinSum + minSums[currMinEnd] <= target) {
+                currMinSum += minSums[currMinEnd];
+                // the current sub-array extends to position (minSumEnds[currMinEnd]), next start position is +1
+                currMinEnd = minSumEnds[currMinEnd] + 1;
             }
+
+            maxLen = Math.max(maxLen, currMinEnd - start);
+            // check if nums[start] is included
+            currMinSum -= currMinEnd > start ? nums[start] : 0;
+            currMinEnd = Math.max(currMinEnd, start + 1);
         }
 
-        return max;
+        return maxLen;
     }
 
     /**
@@ -84,7 +85,7 @@ public class SequenceSum {
 //        int[] nums = {7, 3, 2, 1, 1, 7, -6, -1, 7};
 //        System.out.println(maxLengthSeqSum(nums, 7));
 
-        int[] nums = new int[]{1, -3, 4, -5, 7, 3, -6, 9};
+        int[] nums = new int[]{8, -3, 4, -5, 7, 3, -6, 9};
         System.out.println(maxLengthSeqWithSmallerSum(nums, 6));
     }
 }
