@@ -5,11 +5,26 @@ public class Power {
         if (base == 0) {
             return 0;
         }
+
+        return exponent > 0 ? powerOfPositiveExponent_v2(base, exponent) :
+                1.0 / powerOfPositiveExponent_v2(base, -exponent);
+    }
+
+    public static double powerOfPositiveExponent_v2(double base, int exponent) {
         if (exponent == 0) {
             return 1;
         }
+        if (exponent == 1) {
+            return base;
+        }
 
-        return exponent > 0 ? powerOfPositiveExponent(base, exponent) : 1.0 / powerOfPositiveExponent(base, -exponent);
+        double result = powerOfPositiveExponent_v2(base, exponent >> 1);
+        result *= result;
+        // if the exponent can't be divided by 2 with no remainder
+        if ((exponent & 0x1) == 1) {
+            result *= base;
+        }
+        return result;
     }
 
     public static double powerOfPositiveExponent(double base, int exponent) {
