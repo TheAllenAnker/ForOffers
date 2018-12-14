@@ -1,8 +1,50 @@
 package com.allenanker.chapter4;
 
 import java.util.LinkedList;
+import java.util.Stack;
 
 public class PrintTreeFromTopToBottom {
+    public static <T> void printTreesInZigzag(TreeNode<T> head) {
+        if (head == null) {
+            throw new IllegalArgumentException("Invalid parameter head: head of the binary tree cannot be null");
+        }
+
+        boolean printFromLeft = true;
+        Stack<TreeNode<T>> lToRStack = new Stack<>();
+        Stack<TreeNode<T>> rToLStack = new Stack<>();
+        rToLStack.push(head);
+        TreeNode<T> curr;
+        while (!lToRStack.isEmpty() || !rToLStack.isEmpty()) {
+            if (printFromLeft) {
+                while (!rToLStack.isEmpty()) {
+                    curr = rToLStack.pop();
+                    if (curr.left != null) {
+                        lToRStack.push(curr.left);
+                    }
+                    if (curr.right != null) {
+                        lToRStack.push(curr.right);
+                    }
+                    System.out.print(curr.val + ", ");
+                }
+                printFromLeft = false;
+            } else {
+                while (!lToRStack.isEmpty()) {
+                    curr = lToRStack.pop();
+                    if (curr.right != null) {
+                        rToLStack.push(curr.right);
+                    }
+                    if (curr.left != null) {
+                        rToLStack.push(curr.left);
+                    }
+                    System.out.print(curr.val + ", ");
+                }
+                printFromLeft = true;
+            }
+            System.out.println();
+        }
+
+    }
+
     public static <T> void printTreeByRow(TreeNode<T> head) {
         if (head == null) {
             throw new IllegalArgumentException("Invalid parameter head: head of the binary tree cannot be null");
@@ -32,7 +74,6 @@ public class PrintTreeFromTopToBottom {
             }
             System.out.println();
         }
-
     }
 
     /**
@@ -67,6 +108,7 @@ public class PrintTreeFromTopToBottom {
         head.right.right = new TreeNode<>(11);
         printTree(head);
         printTreeByRow(head);
+        printTreesInZigzag(head);
     }
 }
 
