@@ -1,6 +1,6 @@
 package com.allenanker.chapter4;
 
-import java.util.Random;
+import static com.allenanker.chapter4.ArraysUtil.partition;
 
 public class MoreThanHalfNumber {
     public static int moreThanHalfNum_v2(int[] nums) {
@@ -44,30 +44,6 @@ public class MoreThanHalfNumber {
             }
         }
         return nums[mid];
-    }
-
-    private static int partition(int[] num, int start, int end) {
-        int index = start + new Random().nextInt(end - start + 1);
-        swap(num, index, end);
-        int smaller = start - 1;
-        for (index = start; index < end; index++) {
-            if (num[index] < num[end]) {
-                smaller++;
-                if (smaller != index) {
-                    swap(num, index, smaller);
-                }
-            }
-        }
-        ++smaller;
-        swap(num, smaller, end);
-
-        return smaller;
-    }
-
-    private static void swap(int[] num, int a, int b) {
-        int temp = num[a];
-        num[a] = num[b];
-        num[b] = temp;
     }
 
     public static void main(String[] args) {
