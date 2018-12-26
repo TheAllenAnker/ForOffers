@@ -2,6 +2,37 @@ package com.allenanker.chapter5;
 
 public class MaxValueOfGifts {
     /**
+     * Avoid recalculation using a helper matrix to store the already calculated value.
+     *
+     * @param board
+     * @return
+     */
+    public static int maxValueOfGifts_v2(int[][] board) {
+        if (board == null || board.length == 0 || board[0].length == 0) {
+            throw new IllegalArgumentException("Invalid parameter");
+        }
+
+        int row = board.length;
+        int col = board[0].length;
+        int[][] res = new int[row][col];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                int up = 0;
+                int left = 0;
+                if (i > 0) {
+                    up = res[i - 1][j];
+                }
+                if (j > 0) {
+                    left = res[i][j - 1];
+                }
+                res[i][j] = Math.max(up, left) + board[i][j];
+            }
+        }
+
+        return res[row - 1][col - 1];
+    }
+
+    /**
      * There is a mxn board with mxn gifts on each box, move right or down from the upper-left corner of the board
      * until reaching the bottom-right corner to pick the max value of gifts.
      *
@@ -39,5 +70,6 @@ public class MaxValueOfGifts {
                 {3, 7, 16, 5}
         };
         System.out.println(maxValueOfGifts(board));
+        System.out.println(maxValueOfGifts_v2(board));
     }
 }
