@@ -1,4 +1,4 @@
-package com.allenanker.chapter5;
+package com.allenanker.chapter6;
 
 public class NumberOfK {
     public int numberOfK(int[] nums, int k) {
